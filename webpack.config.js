@@ -25,7 +25,15 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader' }
+        loader: 'ts-loader'
+      },
+      {
+        test: /\.css?$/,
+        loader: 'raw-loader',
+        options: {
+          esModule: false,
+        },
+      }
     ]
   },
   devServer: {

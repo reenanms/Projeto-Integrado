@@ -2,7 +2,7 @@ import IComponent from '../contract/IComponent';
 import TextComponent from '../component/TextComponent';
 import IntegerComponent from '../component/IntegerComponent';
 import DoubleComponent from '../component/DoubleComponent';
-import ListComponent from '../component/ListComponent';
+import ListComponent from '../component/ListComponent/ListComponent';
 import IScreenReaderWriter from '../contract/IScreenReaderWriter';
 import IComponentDefinition from '../contract/IComponentDefinition';
 import ComponentSizeFactory from './ComponentSizeFactory';

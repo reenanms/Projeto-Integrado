@@ -1,9 +1,10 @@
 
-import BasicComponent from "./BasicComponent";
-import IScreenReaderWriter from "../contract/IScreenReaderWriter";
-import IParentComponent from '../contract/IParentComponent';
-import IChildComponent from "../contract/IChildComponent";
-import HtmlDocumentReaderWriter from "../HtmlDocumentReaderWriter";
+import BasicComponent from "../BasicComponent/BasicComponent";
+import IScreenReaderWriter from "../../contract/IScreenReaderWriter";
+import IParentComponent from '../../contract/IParentComponent';
+import IChildComponent from "../../contract/IChildComponent";
+import style from "./ListComponent.css"
+
 
 export default class ListComponent extends BasicComponent
   implements IChildComponent {  
@@ -17,12 +18,10 @@ export default class ListComponent extends BasicComponent
   }
 
   public override build(): void {
-    const html =
-      `<label for="${this.name}">${this.caption}:</label>` +
-      `<select name="${this.name}" id="${this.name}" ></select>`;
-    
+    const html = this.buildHtml2();
     this.readerWriter.addHtml(html);
-    this.readerWriter.addListener(this.name,
+    this.readerWriter.addListener(
+      this.name,
       () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );
 
@@ -30,6 +29,19 @@ export default class ListComponent extends BasicComponent
       this.parent.addValueChangedListener(e => this.setOptions(e));
 
     this.setOptions(this.parent);
+  }
+
+  private buildHtml2(): string {
+    const html =
+      `<div>` +
+        `<style>${style}</style>` +
+        `<label for="${this.name}">` +
+          `<select id="${this.name}" name="${this.name}" placeholder=" " ></select>` +
+          `<span class="placeholder">${this.caption}</span>` +
+        `</label>` +
+      `</div>`;
+
+    return html;
   }
 
   public override writeValue(value: any): void {
@@ -53,9 +65,8 @@ export default class ListComponent extends BasicComponent
   private setOptions(parent: IParentComponent): void {
     const parentValue = parent?.readValue();
     const options = this.getOptions(parentValue);
-
-    new HtmlDocumentReaderWriter("app")
-      .setOptionsByElementName(this.name, options, ListComponent.NO_SELECT_KEY);
+    
+    this.readerWriter.setOptionsByElementName(this.name, options, ListComponent.NO_SELECT_KEY);
   }
 
   private getOptions(filter?: string): { key: string; caption: string; }[] {
